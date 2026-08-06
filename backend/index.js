@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import pool from './lib/db.js';
+import supabase from './lib/supabase.js';
 
 const app = express();
 
@@ -32,20 +33,7 @@ app.get('/api/faculty', async (req, res) => {
 
     const result = await pool.query(query, values);
     res.json(result.rows);
-  } catch (err) {app.get('/api/faculty/:id/rating-summary', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await pool.query(
-      'SELECT AVG(score)::numeric(10,1) AS average, COUNT(*) AS total FROM rating WHERE faculty_id = $1',
-      [id]
-    );
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Something went wrong' });
-  }
-});
-
+  } catch (err){ 
     console.error(err);
     res.status(500).json({ error: 'Something went wrong' });
   }
@@ -100,6 +88,52 @@ app.post('/api/ratings', async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
+
+//<<<<-------------------------AUTHENTICATION------------------------->>
+
+app.post('/api/auth/send-otp', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email||!email.endsWith('@thapar.edu')) {
+      return res.status(400).json({ error: 'A valid college email is required' });
+    }
+
+    const { error } = await supabase.auth.signInWithOtp({ email });
+
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Failed to send OTP' });
+    }
+
+    res.json({ message: 'OTP sent' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+
+app.post('/api/auth/verify-otp', async (req, res) => {
+  try {
+    const { email, token } = req.body;
+
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'email',
+    });
+
+    if (error) {
+      return res.status(401).json({ error: 'Invalid or expired code' });
+    }
+
+    res.json({ session: data.session, user: data.user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
