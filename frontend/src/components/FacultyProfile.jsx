@@ -1,32 +1,113 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import RatingWidget from "./RatingWidget";
 
 function FacultyProfile() {
   const { name } = useParams();
   const [faculty, setFaculty] = useState(null);
   const [notFound, setNotFound] = useState(false);
+  const [ratingSummary, setRatingSummary] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/faculty/${name}`)
-      .then(res => {
+      .then((res) => {
         if (res.status === 404) {
           setNotFound(true);
           return null;
         }
         return res.json();
       })
-      .then(data => {
+      .then((data) => {
         if (data) setFaculty(data);
       });
   }, [name]);
 
-  if (notFound) return <div>Faculty member not found.</div>;
-  if (!faculty) return <div>Loading...</div>;
+  useEffect(() => {
+    if (!faculty) return;
+    fetchRatingSummary();
+  }, [faculty]);
+
+  function fetchRatingSummary() {
+    fetch(`http://localhost:5000/api/faculty/${faculty.id}/rating-summary`)
+      .then((res) => res.json())
+      .then(setRatingSummary);
+  }
+
+  const shellClass = "min-h-screen bg-paper flex items-center justify-center px-6 py-16";
+
+  if (notFound) {
+    return (
+      <div className={shellClass}>
+        <div className="text-center">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-oxblood">
+            Record not found
+          </p>
+          <p className="font-display italic text-2xl text-ink mt-2">
+            No entry for “{name}”
+          </p>
+          <Link
+            to="/faculty"
+            className="inline-block mt-6 font-mono text-xs uppercase tracking-wider text-ivy border-b border-ivy/40 hover:border-ivy pb-0.5"
+          >
+            ← Back to directory
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!faculty) {
+    return (
+      <div className={shellClass}>
+        <p className="font-mono text-sm text-ink-soft animate-pulse">
+          Retrieving record…
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1>{faculty.name}</h1>
-      <p>Department: {faculty.department}</p>
+    <div className={shellClass}>
+      <div className="w-full max-w-md">
+        <Link
+          to="/faculty"
+          className="inline-block mb-6 font-mono text-xs uppercase tracking-wider text-ivy border-b border-ivy/40 hover:border-ivy pb-0.5"
+        >
+          ← Directory
+        </Link>
+
+        {/* Index card */}
+        <div className="relative rounded-sm border border-rule bg-paper-raised px-8 pt-9 pb-8 shadow-[0_1px_0_var(--color-rule)]">
+          {/* brass corner tab */}
+          <div className="absolute -top-3 left-8 bg-brass text-paper-raised font-mono text-[10px] uppercase tracking-[0.2em] px-3 py-1 rounded-sm">
+            Faculty Record
+          </div>
+
+          <h1 className="font-display text-4xl text-ink mt-2">{faculty.name}</h1>
+          <p className="font-mono text-xs uppercase tracking-widest text-ivy mt-2">
+            {faculty.department}
+          </p>
+
+          <div className="my-6 border-t border-rule" />
+
+          <RatingWidget facultyId={faculty.id} onRated={fetchRatingSummary} />
+
+          <div className="mt-6 pt-5 border-t border-rule">
+            {ratingSummary ? (
+              ratingSummary.total === "0" || ratingSummary.total === 0 ? (
+                <p className="font-mono text-sm text-ink-soft">No ratings yet</p>
+              ) : (
+                <p className="font-mono text-sm text-ink">
+                  <span className="text-brass">{ratingSummary.average} ★</span>
+                  <span className="text-ink-soft"> · {ratingSummary.total} ratings</span>
+                </p>
+              )
+            ) : (
+              <p className="font-mono text-sm text-ink-soft">Loading ratings…</p>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,47 +5,76 @@ function FacultyList() {
   const [faculty, setFaculty] = useState([]);
   const [searchName, setSearchName] = useState('');
   const [searchDept, setSearchDept] = useState('');
-  
-
-  // useEffect(() => {
-  //   fetch('http://localhost:5000/api/faculty')
-  //     .then(res => res.json())
-  //     .then(setFaculty);
-  // }, []);
 
   useEffect(() => {
-  const params = new URLSearchParams();
-  if (searchName) params.append('name' , searchName);
-  if (searchDept) params.append('department' , searchDept);
+    const params = new URLSearchParams();
+    if (searchName) params.append('name', searchName);
+    if (searchDept) params.append('department', searchDept);
 
-  fetch(`http://localhost:5000/api/faculty?${params.toString()}`)
-    .then(res => res.json())
-    .then(setFaculty);
-}, [searchName, searchDept]);
+    fetch(`http://localhost:5000/api/faculty?${params.toString()}`)
+      .then((res) => res.json())
+      .then(setFaculty);
+  }, [searchName, searchDept]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-yellow-50 p-8">
-        <input
-  type="text"
-  placeholder="Search by name..."
-  value={searchName}
-  onChange={(e) => setSearchName(e.target.value)}
-  className="px-4 py-2 m-2 rounded-full border-2 border-purple-200 bg-purple-50 text-purple-900 placeholder-purple-400 outline-none focus:border-purple-400 focus:ring-4 focus:ring-purple-200 transition-all duration-200"
-/>
-<br />
-<input
-  type="text"
-  placeholder="Search by dept..."
-  value={searchDept}
-  onChange={(e) => setSearchDept(e.target.value)}
-  className="px-4 py-2 m-2 rounded-full border-2 border-pink-200 bg-pink-50 text-pink-900 placeholder-pink-400 outline-none focus:border-pink-400 focus:ring-4 focus:ring-pink-200 transition-all duration-200"
-/>
+    <div className="min-h-screen bg-paper">
+      <div className="mx-auto max-w-3xl px-6 py-16">
+        {/* Masthead */}
+        <div className="mb-10 border-b-2 border-ink pb-6">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brass-dark">
+            Campus Directory
+          </p>
+          <h1 className="font-display italic text-5xl text-ink mt-1">
+            Faculty Index
+          </h1>
+        </div>
 
-        {faculty.map(f => (
-          <div key={f.name}>
-            <Link to={`/faculty/${f.name}`}>{f.name} — {f.department}</Link>
+        {/* Catalog search slip */}
+        <div className="mb-10 rounded-sm border border-rule bg-paper-raised p-5">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft mb-3">
+            Search records
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              placeholder="Name…"
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              className="flex-1 bg-transparent border-b border-rule px-1 py-2 text-ink placeholder-ink-soft/60 outline-none focus:border-brass transition-colors duration-200"
+            />
+            <input
+              type="text"
+              placeholder="Department…"
+              value={searchDept}
+              onChange={(e) => setSearchDept(e.target.value)}
+              className="flex-1 bg-transparent border-b border-rule px-1 py-2 text-ink placeholder-ink-soft/60 outline-none focus:border-brass transition-colors duration-200"
+            />
           </div>
-        ))}
+        </div>
+
+        {/* Ledger rows */}
+        <div className="border-t border-rule">
+          {faculty.length === 0 && (
+            <p className="font-mono text-sm text-ink-soft py-8 text-center">
+              No matching records.
+            </p>
+          )}
+          {faculty.map((f) => (
+            <Link
+              key={f.id}
+              to={`/faculty/${f.name}`}
+              className="group flex items-center justify-between gap-4 border-b border-rule py-4 px-1 hover:bg-paper-raised transition-colors duration-150"
+            >
+              <span className="font-display text-xl text-ink group-hover:text-brass-dark transition-colors duration-150">
+                {f.name}
+              </span>
+              <span className="font-mono text-[11px] uppercase tracking-wider text-ivy border border-ivy/30 rounded-full px-3 py-1 whitespace-nowrap">
+                {f.department}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
