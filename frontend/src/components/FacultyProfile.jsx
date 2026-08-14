@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import RatingWidget from "./RatingWidget";
-
+import VerifyModal from "./VerifyModal";
 function FacultyProfile() {
   const { name } = useParams();
   const [faculty, setFaculty] = useState(null);
@@ -55,7 +55,7 @@ function FacultyProfile() {
       </div>
     );
   }
-
+  
   if (!faculty) {
     return (
       <div className={shellClass}>
@@ -65,7 +65,7 @@ function FacultyProfile() {
       </div>
     );
   }
-
+  
   return (
     <div className={shellClass}>
       <div className="w-full max-w-md">
@@ -75,7 +75,6 @@ function FacultyProfile() {
         >
           ← Directory
         </Link>
-
         {/* Index card */}
         <div className="relative rounded-sm border border-rule bg-paper-raised px-8 pt-9 pb-8 shadow-[0_1px_0_var(--color-rule)]">
           {/* brass corner tab */}
@@ -105,9 +104,11 @@ function FacultyProfile() {
             ) : (
               <p className="font-mono text-sm text-ink-soft">Loading ratings…</p>
             )}
+            
           </div>
         </div>
       </div>
+<VerifyModal onVerified={(data) => console.log('Verified!', data)} />
     </div>
   );
 }
