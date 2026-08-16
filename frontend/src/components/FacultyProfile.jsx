@@ -2,11 +2,28 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import RatingWidget from "./RatingWidget";
 import VerifyModal from "./VerifyModal";
+import CommentForm from "./CommentForm";
 function FacultyProfile() {
   const { name } = useParams();
   const [faculty, setFaculty] = useState(null);
   const [notFound, setNotFound] = useState(false);
   const [ratingSummary, setRatingSummary] = useState(null);
+
+
+//<<--------------------------check if we have verified or not------------>>>
+  const [isVerified, setIsVerified] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      // confirm it's still actually valid, not just present
+      fetch('http://localhost:5000/api/protected-test', {
+        headers: { 'Authorization': `Bearer ${token}` },
+      }).then(res => setIsVerified(res.ok));
+    }
+  }, []);
+//<<--------------------------------------------------------------------------->>>>>>>>
+
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/faculty/${name}`)
@@ -108,7 +125,13 @@ function FacultyProfile() {
           </div>
         </div>
       </div>
-<VerifyModal onVerified={(data) => console.log('Verified!', data)} />
+
+      {isVerified ? (
+              <CommentForm facultyId={faculty.id} onCommentSubmitted={() => {/* ... */}} />
+            ) : (
+              <VerifyModal onVerified={() => setIsVerified(true)} />
+            )}
+            
     </div>
   );
 }

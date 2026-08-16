@@ -11,8 +11,7 @@ function CommentForm({ facultyId, onCommentSubmitted }) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ facultyId, text }),
-    });
+    body: JSON.stringify({ facultyId, text, semester: '2026-Spring' }),    });
     if (res.ok) {
       setText('');
       onCommentSubmitted();
