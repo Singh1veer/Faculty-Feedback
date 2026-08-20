@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import FacultyList from './components/FacultyList';
 import FacultyProfile from './components/FacultyProfile';
 import { useNavigate } from 'react-router-dom';
+import AdminPage from './components/AdminPage';
 
 function App() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/faculty" element={<FacultyList />} />
         <Route path="/faculty/:name" element={<FacultyProfile />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes> 
     );
 

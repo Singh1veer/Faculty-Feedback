@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import pool from "./lib/db.js";
 import supabase from "./lib/supabase.js";
-
+import rateLimit from 'express-rate-limit';
 const app = express();
 
 app.use(cors());
@@ -13,7 +13,11 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({ status: "ok" });
 });
-
+const commentLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10, // max 10 requests per window per IP
+  message: { error: 'Too many comments submitted. Please try again later.' },
+});
 app.get("/api/faculty", async (req, res) => {
   try {
     const { department, name } = req.query;
@@ -70,7 +74,7 @@ app.get("/api/faculty/:name", async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
-app.post("/api/ratings", async (req, res) => {
+app.post("/api/ratings",commentLimiter,async (req, res) => {
   try {
     const facultyId = req.body.facultyId;
     const score = req.body.score;
@@ -180,7 +184,7 @@ app.get("/api/protected-test", requireAuth, (req, res) => {
 import { Filter } from 'bad-words';
 const filter = new Filter();
 
-app.post('/api/comments', requireAuth, async (req, res) => {
+app.post('/api/comments', requireAuth,commentLimiter, async (req, res) => {
   try {
     const { facultyId, text, semester } = req.body;
     const userId = req.user.id;

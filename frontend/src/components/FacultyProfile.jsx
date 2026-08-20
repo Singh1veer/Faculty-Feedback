@@ -3,11 +3,13 @@ import { useParams, Link } from "react-router-dom";
 import RatingWidget from "./RatingWidget";
 import VerifyModal from "./VerifyModal";
 import CommentForm from "./CommentForm";
+import CommentList from './CommentList';
 function FacultyProfile() {
   const { name } = useParams();
   const [faculty, setFaculty] = useState(null);
   const [notFound, setNotFound] = useState(false);
   const [ratingSummary, setRatingSummary] = useState(null);
+  const [commentRefreshKey, setCommentRefreshKey] = useState(0);
 
 
 //<<--------------------------check if we have verified or not------------>>>
@@ -127,11 +129,12 @@ function FacultyProfile() {
       </div>
 
       {isVerified ? (
-              <CommentForm facultyId={faculty.id} onCommentSubmitted={() => {/* ... */}} />
+              <CommentForm facultyId={faculty.id} onCommentSubmitted={() => {() => setCommentRefreshKey(prev => prev + 1)}} />
             ) : (
               <VerifyModal onVerified={() => setIsVerified(true)} />
             )}
-            
+            <h3>Comments</h3>
+            <CommentList facultyId={faculty.id} refreshKey={commentRefreshKey} />
     </div>
   );
 }

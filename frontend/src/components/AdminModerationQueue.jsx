@@ -7,19 +7,24 @@ function AdminModerationQueue() {
     fetchPending();
   }, []);
 
-  function fetchPending() {
-    fetch('http://localhost:5000/api/admin/comments/pending')
-      .then(res => res.json())
-      .then(setPending);
-  }
+function fetchPending() {
+  const token = localStorage.getItem('access_token');
+  fetch('http://localhost:5000/api/admin/comments/pending', {
+    headers: { 'Authorization': `Bearer ${token}` },
+  }).then(res => res.json()).then(setPending);
+}
 
-  function moderate(id, status) {
-    fetch(`http://localhost:5000/api/admin/comments/${id}/moderate`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
-    }).then(fetchPending);
-  }
+function moderate(id, status) {
+  const token = localStorage.getItem('access_token');
+  fetch(`http://localhost:5000/api/admin/comments/${id}/moderate`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ status }),
+  }).then(fetchPending);
+}
 
   return (
     <div>
