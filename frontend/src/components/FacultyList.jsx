@@ -7,6 +7,7 @@ function FacultyList() {
   const [searchDept, setSearchDept] = useState('');
 
   useEffect(() => {
+     console.log('API URL is:', import.meta.env.VITE_API_URL); 
     const params = new URLSearchParams();
     if (searchName) params.append('name', searchName);
     if (searchDept) params.append('department', searchDept);
