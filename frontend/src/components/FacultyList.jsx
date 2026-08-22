@@ -6,16 +6,30 @@ function FacultyList() {
   const [searchName, setSearchName] = useState('');
   const [searchDept, setSearchDept] = useState('');
 
-  useEffect(() => {
-     console.log('API URL is:', import.meta.env.VITE_API_URL); 
-    const params = new URLSearchParams();
-    if (searchName) params.append('name', searchName);
-    if (searchDept) params.append('department', searchDept);
+  // useEffect(() => {
+  //    console.log('API URL is:', import.meta.env.VITE_API_URL); 
+  //   const params = new URLSearchParams();
+  //   if (searchName) params.append('name', searchName);
+  //   if (searchDept) params.append('department', searchDept);
 
-    fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`)
-      .then((res) => res.json())
-      .then(setFaculty);
-  }, [searchName, searchDept]);
+  //   fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`)
+  //     .then((res) => res.json())
+  //     .then(setFaculty);
+  // }, [searchName, searchDept]);
+
+useEffect(() => {
+  console.log("========== FACULTY LIST LOADED ==========");
+  console.log("API URL is:", import.meta.env.VITE_API_URL);
+
+  const params = new URLSearchParams();
+
+  if (searchName) params.append("name", searchName);
+  if (searchDept) params.append("department", searchDept);
+
+  fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`)
+    .then((res) => res.json())
+    .then(setFaculty);
+}, [searchName, searchDept]);
 
   return (
     <div className="min-h-screen bg-paper">
