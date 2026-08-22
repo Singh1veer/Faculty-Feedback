@@ -8,12 +8,12 @@ function AdminFacultyManage() {
   useEffect(() => { fetchFaculty(); }, []);
 
   function fetchFaculty() {
-    fetch('http://localhost:5000/api/faculty').then(res => res.json()).then(setFaculty);
+    fetch(`${import.meta.env.VITE_API_URL}/api/faculty`).then(res => res.json()).then(setFaculty);
   }
 
   function addFaculty() {
     const token = localStorage.getItem('access_token');
-    fetch('http://localhost:5000/api/admin/faculty', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/faculty`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ name, department }),
@@ -22,7 +22,7 @@ function AdminFacultyManage() {
 
   function deleteFaculty(id) {
     const token = localStorage.getItem('access_token');
-    fetch(`http://localhost:5000/api/admin/faculty/${id}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/faculty/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` },
     }).then(fetchFaculty);

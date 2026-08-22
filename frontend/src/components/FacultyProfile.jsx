@@ -19,7 +19,7 @@ function FacultyProfile() {
     const token = localStorage.getItem('access_token');
     if (token) {
       // confirm it's still actually valid, not just present
-      fetch('http://localhost:5000/api/protected-test', {
+      fetch(`${import.meta.env.VITE_API_URL}/api/protected-test`, {
         headers: { 'Authorization': `Bearer ${token}` },
       }).then(res => setIsVerified(res.ok));
     }
@@ -28,7 +28,7 @@ function FacultyProfile() {
 
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/faculty/${name}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${name}`)
       .then((res) => {
         if (res.status === 404) {
           setNotFound(true);
@@ -47,7 +47,7 @@ function FacultyProfile() {
   }, [faculty]);
 
   function fetchRatingSummary() {
-    fetch(`http://localhost:5000/api/faculty/${faculty.id}/rating-summary`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${faculty.id}/rating-summary`)
       .then((res) => res.json())
       .then(setRatingSummary);
   }

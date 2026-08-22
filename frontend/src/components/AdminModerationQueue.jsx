@@ -9,14 +9,14 @@ function AdminModerationQueue() {
 
 function fetchPending() {
   const token = localStorage.getItem('access_token');
-  fetch('http://localhost:5000/api/admin/comments/pending', {
+  fetch(`${import.meta.env.VITE_API_URL}/api/admin/comments/pending`, {
     headers: { 'Authorization': `Bearer ${token}` },
   }).then(res => res.json()).then(setPending);
 }
 
 function moderate(id, status) {
   const token = localStorage.getItem('access_token');
-  fetch(`http://localhost:5000/api/admin/comments/${id}/moderate`, {
+  fetch(`${import.meta.env.VITE_API_URL}/api/admin/comments/${id}/moderate`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

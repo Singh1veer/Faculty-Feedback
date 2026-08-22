@@ -7,7 +7,7 @@ function RatingWidget({ facultyId, onRated }) {
 
   const handleRate = async (score) => {
     setSelected(score);
-    const res = await fetch('http://localhost:5000/api/ratings', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/ratings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ facultyId, score }),

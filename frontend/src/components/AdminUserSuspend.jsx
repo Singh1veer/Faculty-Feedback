@@ -7,7 +7,7 @@ function AdminUserSuspend() {
 
   function suspendUser() {
     const token = localStorage.getItem('access_token');
-    fetch(`http://localhost:5000/api/admin/users/${userId}/suspend`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/${userId}/suspend`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ reason }),

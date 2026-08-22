@@ -5,7 +5,7 @@ function CommentForm({ facultyId, onCommentSubmitted }) {
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('access_token');
-    const res = await fetch('http://localhost:5000/api/comments', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
