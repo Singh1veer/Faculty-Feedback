@@ -11,7 +11,7 @@ function FacultyList() {
     if (searchName) params.append('name', searchName);
     if (searchDept) params.append('department', searchDept);
 
-    fetch(`http://localhost:5000/api/faculty?${params.toString()}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`)
       .then((res) => res.json())
       .then(setFaculty);
   }, [searchName, searchDept]);

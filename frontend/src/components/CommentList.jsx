@@ -4,7 +4,7 @@ function CommentList({ facultyId, refreshKey }) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/faculty/${facultyId}/comments`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${facultyId}/comments`)
       .then(res => res.json())
       .then(setComments);
   }, [facultyId, refreshKey]);
