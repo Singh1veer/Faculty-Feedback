@@ -4,6 +4,7 @@ import RatingWidget from "./RatingWidget";
 import VerifyModal from "./VerifyModal";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
+import CommentsPage from "./CommentsPage";
 function FacultyProfile() {
   const { name } = useParams();
   const [faculty, setFaculty] = useState(null);

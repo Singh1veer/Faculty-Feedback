@@ -4,6 +4,7 @@ import FacultyList from './components/FacultyList';
 import FacultyProfile from './components/FacultyProfile';
 import { useNavigate } from 'react-router-dom';
 import AdminPage from './components/AdminPage';
+import CommentsPage from './components/CommentsPage';
 
 function App() {
   const navigate = useNavigate();
