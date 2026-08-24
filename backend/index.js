@@ -293,7 +293,9 @@ app.patch('/api/admin/comments/:id/moderate', requireAdmin, async (req, res) => 
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
-
+app.get('/api/admin/protected-test', requireAdmin, (req, res) => {
+  res.json({ message: `Hello admin ${req.user.email}` });
+});
 //<<=------------------------------Admin priveleges---------------------------------->>
 
 

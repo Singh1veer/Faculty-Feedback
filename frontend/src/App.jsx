@@ -24,6 +24,7 @@ function App() {
         <Route path="/faculty" element={<FacultyList />} />
         <Route path="/faculty/:name" element={<FacultyProfile />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/faculty/:name/comments" element={<CommentsPage />} />
       </Routes> 
     );
 

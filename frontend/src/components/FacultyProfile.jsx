@@ -3,30 +3,13 @@ import { useParams, Link } from "react-router-dom";
 import RatingWidget from "./RatingWidget";
 import VerifyModal from "./VerifyModal";
 import CommentForm from "./CommentForm";
-import CommentList from './CommentList';
+import CommentList from "./CommentList";
 function FacultyProfile() {
   const { name } = useParams();
   const [faculty, setFaculty] = useState(null);
   const [notFound, setNotFound] = useState(false);
   const [ratingSummary, setRatingSummary] = useState(null);
-  const [commentRefreshKey, setCommentRefreshKey] = useState(0);
-
-
-//<<--------------------------check if we have verified or not------------>>>
-  const [isVerified, setIsVerified] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      // confirm it's still actually valid, not just present
-      fetch(`${import.meta.env.VITE_API_URL}/api/protected-test`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      }).then(res => setIsVerified(res.ok));
-    }
-  }, []);
-//<<--------------------------------------------------------------------------->>>>>>>>
-
-
+  //<<--------------------------------------------------------------------------->>>>>>>>
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${name}`)
       .then((res) => {
@@ -47,12 +30,15 @@ function FacultyProfile() {
   }, [faculty]);
 
   function fetchRatingSummary() {
-    fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${faculty.id}/rating-summary`)
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/faculty/${faculty.id}/rating-summary`,
+    )
       .then((res) => res.json())
       .then(setRatingSummary);
   }
 
-  const shellClass = "min-h-screen bg-paper flex items-center justify-center px-6 py-16";
+  const shellClass =
+    "min-h-screen bg-paper flex items-center justify-center px-6 py-16";
 
   if (notFound) {
     return (
@@ -74,7 +60,7 @@ function FacultyProfile() {
       </div>
     );
   }
-  
+
   if (!faculty) {
     return (
       <div className={shellClass}>
@@ -84,7 +70,7 @@ function FacultyProfile() {
       </div>
     );
   }
-  
+
   return (
     <div className={shellClass}>
       <div className="w-full max-w-md">
@@ -101,7 +87,9 @@ function FacultyProfile() {
             Faculty Record
           </div>
 
-          <h1 className="font-display text-4xl text-ink mt-2">{faculty.name}</h1>
+          <h1 className="font-display text-4xl text-ink mt-2">
+            {faculty.name}
+          </h1>
           <p className="font-mono text-xs uppercase tracking-widest text-ivy mt-2">
             {faculty.department}
           </p>
@@ -113,28 +101,33 @@ function FacultyProfile() {
           <div className="mt-6 pt-5 border-t border-rule">
             {ratingSummary ? (
               ratingSummary.total === "0" || ratingSummary.total === 0 ? (
-                <p className="font-mono text-sm text-ink-soft">No ratings yet</p>
+                <p className="font-mono text-sm text-ink-soft">
+                  No ratings yet
+                </p>
               ) : (
                 <p className="font-mono text-sm text-ink">
                   <span className="text-brass">{ratingSummary.average} ★</span>
-                  <span className="text-ink-soft"> · {ratingSummary.total} ratings</span>
+                  <span className="text-ink-soft">
+                    {" "}
+                    · {ratingSummary.total} ratings
+                  </span>
                 </p>
               )
             ) : (
-              <p className="font-mono text-sm text-ink-soft">Loading ratings…</p>
+              <p className="font-mono text-sm text-ink-soft">
+                Loading ratings…
+              </p>
             )}
-            
           </div>
         </div>
       </div>
 
-      {isVerified ? (
-              <CommentForm facultyId={faculty.id} onCommentSubmitted={() => {() => setCommentRefreshKey(prev => prev + 1)}} />
-            ) : (
-              <VerifyModal onVerified={() => setIsVerified(true)} />
-            )}
-            <h3>Comments</h3>
-            <CommentList facultyId={faculty.id} refreshKey={commentRefreshKey} />
+      <Link
+        to={`/faculty/${name}/comments`}
+        className="inline-block mt-6 font-mono text-xs uppercase tracking-wider text-ivy border-b border-ivy/40 hover:border-ivy pb-0.5"
+      >
+        View & write comments →
+      </Link>
     </div>
   );
 }
