@@ -9,6 +9,9 @@ function GoogleSignIn({ onStart }) {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
+      queryParams: {
+      hd: 'thapar.edu',
+         },
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
@@ -20,4 +23,3 @@ function GoogleSignIn({ onStart }) {
     </button>
   );
 }
-export default GoogleSignIn;

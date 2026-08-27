@@ -15,9 +15,14 @@ app.get("/", (req, res) => {
   res.json({ status: "ok" });
 });
 const commentLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 10, // max 10 requests per window per IP
+  windowMs: 60 * 60 * 1000,
+  max: 10, 
   message: { error: 'Too many comments submitted. Please try again later.' },
+});
+const ratingLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, 
+  max: 10,
+  message: { error: '1 rating per faculty' },
 });
 app.get("/api/faculty", async (req, res) => {
   try {
@@ -75,7 +80,7 @@ app.get("/api/faculty/:name", async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
-app.post("/api/ratings",commentLimiter,async (req, res) => {
+app.post("/api/ratings",ratingLimiter,async (req, res) => {
   try {
     const facultyId = req.body.facultyId;
     const score = req.body.score;
@@ -113,9 +118,10 @@ async function requireAuth(req, res, next) {
     if (error || !data.user) {
       return res.status(401).json({ error: 'Invalid session' });
     }
-    if (!data.user.email.endsWith('@thapar.edu')) {
-      return res.status(403).json({ error: 'Only college accounts are allowed' });
-    }
+    if (!user.email.endsWith('@thapar.edu')) {
+     await supabase.auth.admin.deleteUser(user.id); 
+     return res.status(403).json({ error: 'Only college accounts are allowed' });
+}
     const suspendedCheck = await pool.query(
       'SELECT * FROM suspended_user WHERE user_id = $1',
       [data.user.id]
