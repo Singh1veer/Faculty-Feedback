@@ -32,7 +32,7 @@ app.get("/api/faculty", async (req, res) => {
     }
 
     if (name) {
-      values.push(`%${name}%`);
+      values.push(`${name}%`);
       query += ` AND name ILIKE $${values.length}`;
     }
 
