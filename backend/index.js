@@ -127,7 +127,7 @@ async function requireAuth(req, res, next) {
       [data.user.id]
     );
     await pool.query(
-      `INSERT INTO public.users (id, email) VALUES ($1, $2)ON CONFLICT (id) DO NOTHING`,
+      `INSERT INTO users (id, email) VALUES ($1, $2)ON CONFLICT (id) DO NOTHING`,
       [data.user.id, data.user.email]
     );
     if (suspendedCheck.rows.length > 0) {
