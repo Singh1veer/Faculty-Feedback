@@ -23,3 +23,4 @@ function GoogleSignIn({ onStart }) {
     </button>
   );
 }
+export default GoogleSignIn;
