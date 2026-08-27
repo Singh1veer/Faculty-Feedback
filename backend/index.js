@@ -21,7 +21,7 @@ const commentLimiter = rateLimit({
 });
 const ratingLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, 
-  max: 10,
+  max: 1,
   message: { error: '1 rating per faculty' },
 });
 app.get("/api/faculty", async (req, res) => {
