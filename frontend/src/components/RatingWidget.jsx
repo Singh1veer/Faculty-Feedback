@@ -36,7 +36,7 @@ function RatingWidget({ facultyId, onRated }) {
             onClick={() => handleRate(n)}
             onMouseEnter={() => setHovered(n)}
             aria-label={`Rate ${n} star${n > 1 ? 's' : ''}`}
-            className={`text-3xl leading-none transition-transform duration-150 hover:scale-110 focus-visible:outline focus-visible:outline- focus-visible:outline-brass focus-visible:outline-offset-2 ${
+            className={`text-3xl leading-none transition-transform duration-150 hover:scale-110 focus-visible:outline-brass focus-visible:outline-offset-2 ${
               (hovered || selected) >= n ? 'text-brass' : 'text-rule'
             }`}
           >
