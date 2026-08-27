@@ -27,12 +27,12 @@ app.get("/api/faculty", async (req, res) => {
     const values = [];
     
     if (department) {
-      values.push(`${department}%`);
+      values.push(`%${department}%`);
       query += ` AND department ILIKE $${values.length}`;
     }
 
     if (name) {
-      values.push(`${name}`);
+      values.push(`%${name}%`);
       query += ` AND name ILIKE $${values.length}`;
     }
 
