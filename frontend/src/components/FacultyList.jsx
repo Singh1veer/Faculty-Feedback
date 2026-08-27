@@ -17,45 +17,21 @@ function FacultyList() {
   //     .then(setFaculty);
   // }, [searchName, searchDept]);
 
-// useEffect(() => {
-//   console.log("========== FACULTY LIST LOADED ==========");
-//   console.log("API URL is:", import.meta.env.VITE_API_URL);
-
-//   const params = new URLSearchParams();
-
-//   if (searchName) params.append("name", searchName);
-//   if (searchDept) params.append("department", searchDept);
-
-//   fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`)
-//     .then((res) => res.json())
-//     .then(setFaculty);
-// }, [searchName, searchDept]);
-
 useEffect(() => {
-  const controller = new AbortController();
+  console.log("========== FACULTY LIST LOADED ==========");
+  console.log("API URL is:", import.meta.env.VITE_API_URL);
 
-  const timeoutId = setTimeout(() => {
-    const params = new URLSearchParams();
-    if (searchName) params.append("name", searchName);
-    if (searchDept) params.append("department", searchDept);
+  const params = new URLSearchParams();
 
-    fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`, {
-      signal: controller.signal,
-    })
-      .then((res) => res.json())
-      .then(setFaculty)
-      .catch((err) => {
-        if (err.name !== "AbortError") {
-          console.error(err);
-        }
-      });
-  }, 300); 
+  if (searchName) params.append("name", searchName);
+  if (searchDept) params.append("department", searchDept);
 
-  return () => {
-    controller.abort();     
-    clearTimeout(timeoutId); 
-  };
+  fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`)
+    .then((res) => res.json())
+    .then(setFaculty);
 }, [searchName, searchDept]);
+
+
 
   return (
     <div className="min-h-screen bg-paper">
