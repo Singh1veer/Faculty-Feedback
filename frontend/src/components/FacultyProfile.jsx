@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import RatingWidget from "./RatingWidget";
-import VerifyModal from "./VerifyModal";
+import VerifyModal from "./GoogleSignIn";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import CommentsPage from "./CommentsPage";

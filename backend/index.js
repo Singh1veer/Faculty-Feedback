@@ -113,7 +113,9 @@ async function requireAuth(req, res, next) {
     if (error || !data.user) {
       return res.status(401).json({ error: 'Invalid session' });
     }
-
+    if (!data.user.email.endsWith('@thapar.edu')) {
+      return res.status(403).json({ error: 'Only college accounts are allowed' });
+    }
     const suspendedCheck = await pool.query(
       'SELECT * FROM suspended_user WHERE user_id = $1',
       [data.user.id]

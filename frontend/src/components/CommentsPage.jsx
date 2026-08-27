@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
-import VerifyModal from './VerifyModal';
+import VerifyModal from './GoogleSignIn';
 
 function CommentsPage() {
   const { name } = useParams();
@@ -70,7 +70,7 @@ function CommentsPage() {
               }}
             />
           ) : (
-            <VerifyModal onVerified={() => setIsVerified(true)} />
+            <VerifyModal onStart={() => {}} />
           )
         )}
 

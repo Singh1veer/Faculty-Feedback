@@ -26,6 +26,7 @@ function App() {
         <Route path="/faculty/:name" element={<FacultyProfile />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/faculty/:name/comments" element={<CommentsPage />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes> 
     );
 

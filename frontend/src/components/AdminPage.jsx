@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AdminFacultyManage from "./AdminFacultyManage";
 import AdminUserSuspend from "./AdminUserSuspend";
 import AdminModerationQueue from "./AdminModerationQueue";
-import VerifyModal from "./VerifyModal";
+import VerifyModal from "./GoogleSignIn";
 
 function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -28,13 +28,13 @@ function AdminPage() {
     return (
       <div>
         <p>Admin verification required.</p>
-        <VerifyModal
-          onVerified={() => {
-            const token = localStorage.getItem("access_token");
-            fetch(`${import.meta.env.VITE_API_URL}/api/admin/protected-test`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }).then((res) => setIsAdmin(res.ok));
-          }}
+        <VerifyModal onStart={() => {}}
+          // onVerified={() => {
+          //   const token = localStorage.getItem("access_token");
+          //   fetch(`${import.meta.env.VITE_API_URL}/api/admin/protected-test`, {
+          //     headers: { Authorization: `Bearer ${token}` },
+          //   }).then((res) => setIsAdmin(res.ok));
+          // }}
         />
       </div>
     );
