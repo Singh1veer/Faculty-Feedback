@@ -1,19 +1,45 @@
 import { useState } from 'react';
+import { getOrCreateDeviceToken } from '../lib/deviceToken';
 
 function RatingWidget({ facultyId, onRated }) {
   const [selected, setSelected] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [alreadyRated, setAlreadyRated] = useState(false);
 
   const handleRate = async (score) => {
     setSelected(score);
+    const deviceToken = getOrCreateDeviceToken();
+
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/ratings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ facultyId, score }),
+      body: JSON.stringify({ facultyId, score, deviceToken }),
     });
-    if (res.ok) setSubmitted(true);
-    if (onRated) onRated();
+
+    if (res.status === 409) {
+      setAlreadyRated(true);
+      return;
+    }
+
+    if (res.ok) {
+      setSubmitted(true);
+      if (onRated) onRated();
+    }
+  };
+
+  const handleReRate = async () => {
+    const deviceToken = getOrCreateDeviceToken();
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/ratings/${facultyId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ score: selected, deviceToken }),
+    });
+    if (res.ok) {
+      setSubmitted(true);
+      setAlreadyRated(false);
+      if (onRated) onRated();
+    }
   };
 
   if (submitted) {
@@ -21,6 +47,30 @@ function RatingWidget({ facultyId, onRated }) {
       <p className="font-mono text-sm text-ivy">
         Thanks for rating {selected} ⭐
       </p>
+    );
+  }
+
+  if (alreadyRated) {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="font-mono text-sm text-ink-soft">
+          You've already rated this faculty member.
+        </p>
+        <div className="flex gap-2">
+          <button
+            onClick={handleReRate}
+            className="font-mono text-xs uppercase text-ivy border-b border-ivy/40 hover:border-ivy"
+          >
+            Re-rate as {selected} ⭐
+          </button>
+          <button
+            onClick={() => setAlreadyRated(false)}
+            className="font-mono text-xs uppercase text-ink-soft"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     );
   }
 

@@ -84,16 +84,26 @@ app.post("/api/ratings",ratingLimiter,async (req, res) => {
   try {
     const facultyId = req.body.facultyId;
     const score = req.body.score;
-    
-    if (!facultyId || !score) {
+    const deviceToken =req.body.deviceToken;
+    if (!facultyId || !score || score < 1 || score > 5) {
       return res
       .status(400)
       .json({ error: "facultyId and score are required" });
     }
     
-    const result = await pool.query(
-      "INSERT INTO rating (faculty_id, score) VALUES ($1, $2) RETURNING *",
-      [facultyId, score],
+       const existing = await pool.query(
+      'SELECT * FROM rating WHERE faculty_id = $1 AND user_id = $2',
+      [facultyId, deviceToken ]
+    );
+        if (existing.rows.length > 0) {
+      return res.status(409).json({
+        error: 'You have already rated this faculty member',
+        existingRating: existing.rows[0],
+      });
+    }
+        const result = await pool.query(
+      'INSERT INTO rating (faculty_id, score, user_id) VALUES ($1, $2, $3) RETURNING *',
+      [facultyId, score, deviceToken ]
     );
     
     res.status(201).json(result.rows[0]);
