@@ -91,9 +91,9 @@ app.post("/api/ratings",ratingLimiter,async (req, res) => {
       .json({ error: "facultyId and score are required" });
     }
     
-       const existing = await pool.query(
-      'SELECT * FROM rating WHERE faculty_id = $1 AND user_id = $2',
-      [facultyId, deviceToken ]
+    const existing = await pool.query(
+      'SELECT * FROM rating WHERE faculty_id = $1 AND device_token = $2',
+      [facultyId, deviceToken]
     );
         if (existing.rows.length > 0) {
       return res.status(409).json({
@@ -101,9 +101,9 @@ app.post("/api/ratings",ratingLimiter,async (req, res) => {
         existingRating: existing.rows[0],
       });
     }
-        const result = await pool.query(
-      'INSERT INTO rating (faculty_id, score, user_id) VALUES ($1, $2, $3) RETURNING *',
-      [facultyId, score, deviceToken ]
+    const result = await pool.query(
+      'INSERT INTO rating (faculty_id, score, device_token) VALUES ($1, $2, $3) RETURNING *',
+      [facultyId, score, deviceToken]
     );
     
     res.status(201).json(result.rows[0]);
