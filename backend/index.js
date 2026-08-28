@@ -80,7 +80,7 @@ app.get("/api/faculty/:name", async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
-app.post("/api/ratings",ratingLimiter,async (req, res) => {
+app.post("/api/ratings",async (req, res) => {
   try {
     const facultyId = req.body.facultyId;
     const score = req.body.score;
