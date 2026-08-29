@@ -168,14 +168,14 @@ function CommentsPage() {
               className="border border-rule px-3 py-2 font-mono text-sm mr-2"
             >
               <option value="">Select…</option>
-              <option value="Semester">1st</option>
-              <option value="Semester">2nd</option>
-              <option value="Semester">3rd</option>
-              <option value="2026-Spring">4th</option>
-              <option value="2026-Spring">5th</option>
-              <option value="2026-Spring">6th</option>
-              <option value="2026-Spring">7th</option>
-              <option value="2026-Spring">8th</option>
+              <option value="Semester 1">1st</option>
+              <option value="Semester 2">2nd</option>
+              <option value="Semester 3">3rd</option>
+              <option value="Semester 4">4th</option>
+              <option value="Semester 5">5th</option>
+              <option value="Semester 6">6th</option>
+              <option value="Semester 7">7th</option>
+              <option value="Semester 8">8th</option>
             </select>
             <button onClick={saveSemester} className="bg-ivy text-paper font-mono text-xs uppercase py-2 px-4">
               Continue
