@@ -8,8 +8,6 @@ const supabase = createClient(
 function GoogleSignIn({ onStart }) {
   const signIn = async () => {
     if (onStart) onStart();
-    localStorage.setItem('return_to', window.location.pathname);
-
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
