@@ -8,8 +8,6 @@ const supabase = createClient(
 function GoogleSignIn({ onStart }) {
   const signIn = async () => {
     if (onStart) onStart();
-
-    // remember exactly where the user was, before redirecting to Google
     localStorage.setItem('return_to', window.location.pathname);
 
     await supabase.auth.signInWithOAuth({
@@ -17,6 +15,7 @@ function GoogleSignIn({ onStart }) {
       options: {
         queryParams: {
           hd: 'thapar.edu',
+          prompt:'select_account'
         },
         redirectTo: `${window.location.origin}/auth/callback`,
       },
