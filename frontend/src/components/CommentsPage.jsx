@@ -161,15 +161,21 @@ function CommentsPage() {
 
         {isVerified && !semester && (
           <div className="mb-8">
-            <p className="font-mono text-sm text-ink-soft mb-2">Select your semester to continue:</p>
+            <p className="font-mono text-sm text-ink-soft mb-2">First select semester in which your studied from above teacher to continue:</p>
             <select
               value={semesterInput}
               onChange={e => setSemesterInput(e.target.value)}
               className="border border-rule px-3 py-2 font-mono text-sm mr-2"
             >
               <option value="">Select…</option>
-              <option value="2026-Spring">Spring 2026</option>
-              <option value="2026-Fall">Fall 2026</option>
+              <option value="2026-Spring">1st</option>
+              <option value="2026-Spring">2nd</option>
+              <option value="2026-Spring">3rd</option>
+              <option value="2026-Spring">4th</option>
+              <option value="2026-Spring">5th</option>
+              <option value="2026-Spring">6th</option>
+              <option value="2026-Spring">7th</option>
+              <option value="2026-Spring">8th</option>
             </select>
             <button onClick={saveSemester} className="bg-ivy text-paper font-mono text-xs uppercase py-2 px-4">
               Continue
