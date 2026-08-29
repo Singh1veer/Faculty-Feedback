@@ -128,7 +128,7 @@ async function requireAuth(req, res, next) {
     if (error || !data.user) {
       return res.status(401).json({ error: 'Invalid session' });
     }
-    if (!user.email.endsWith('@thapar.edu')) {
+    if (!data.user.email.endsWith('@thapar.edu')) {
      await supabase.auth.admin.deleteUser(user.id); 
      return res.status(403).json({ error: 'Only college accounts are allowed' });
 }
