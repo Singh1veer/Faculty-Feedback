@@ -1,17 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
+
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
+
 function GoogleSignIn({ onStart }) {
   const signIn = async () => {
     if (onStart) onStart();
+
+    // remember exactly where the user was, before redirecting to Google
+    localStorage.setItem('return_to', window.location.pathname);
+
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-      queryParams: {
-      hd: 'thapar.edu',
-         },
+        queryParams: {
+          hd: 'thapar.edu',
+        },
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
@@ -23,4 +29,5 @@ function GoogleSignIn({ onStart }) {
     </button>
   );
 }
+
 export default GoogleSignIn;
