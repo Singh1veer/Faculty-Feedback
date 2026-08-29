@@ -5,6 +5,7 @@ import VerifyModal from "./GoogleSignIn";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import CommentsPage from "./CommentsPage";
+import { signOut } from '../lib/auth';
 function FacultyProfile() {
   const { name } = useParams();
   const [faculty, setFaculty] = useState(null);
@@ -81,6 +82,9 @@ function FacultyProfile() {
         >
           ← Directory
         </Link>
+        <button onClick={signOut} className="font-mono text-xs uppercase text-oxblood">
+          Sign out
+         </button>
         {/* Index card */}
         <div className="relative rounded-sm border border-rule bg-paper-raised px-8 pt-9 pb-8 shadow-[0_1px_0_var(--color-rule)]">
           {/* brass corner tab */}

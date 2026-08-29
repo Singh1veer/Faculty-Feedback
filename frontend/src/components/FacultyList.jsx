@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import { signOut } from '../lib/auth';
 function FacultyList() {
   const [faculty, setFaculty] = useState([]);
   const [searchName, setSearchName] = useState('');
@@ -44,6 +44,9 @@ useEffect(() => {
           <h1 className="font-display italic text-5xl text-ink mt-1">
             Faculty Index
           </h1>
+          <button onClick={signOut} className="font-mono text-xs uppercase text-oxblood">
+          Sign out
+         </button>
         </div>
 
         {/* Catalog search slip */}
