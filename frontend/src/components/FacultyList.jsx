@@ -166,7 +166,7 @@ function FacultyList() {
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-oxblood">
               Student-submitted · Fall 2026
             </p>
-            <h1 className="font-display text-4xl text-ink mt-1">Professor Report Card</h1>
+            <h1 className="font-display text-4xl text-ink mt-1">Faculty Metrics</h1>
             <p className="text-ink-soft text-sm mt-1">{faculty.length} professors on file</p>
           </div>
           {isSignedIn && (
@@ -181,7 +181,6 @@ function FacultyList() {
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="flex-1 relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-soft text-sm">🔍</span>
             <input
               value={searchName}
               onChange={e => setSearchName(e.target.value)}
@@ -195,6 +194,12 @@ function FacultyList() {
             className="rounded-full bg-white border border-rule px-4 py-3 text-sm outline-none focus:border-brass transition-colors"
           >
             <option value="">All departments</option>
+            <option value="Chemical">Chemical Dept.</option>
+            <option value="Civil">Civil Dept.</option>
+            <option value="Computer Science">CSED</option>
+            <option value="Electronics">ECED</option>
+            <option value="Humanities">Humanities Dept.</option>
+            <option value="Physics">Physics Dept.</option>
           </select>
         </div>
 
