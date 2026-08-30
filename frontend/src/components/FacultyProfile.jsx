@@ -238,7 +238,8 @@ function FacultyProfile() {
           </div>
           {total > 0 ? (
             <p className="text-ink-soft text-sm mt-2">
-              {/* {avg.toFixed(1)}/5 · Grade <span className="font-medium text-ink">{gradeFor(avg)}</span> · {total} student review{total !== 1 ? 's' : ''} */}
+              {/* Grade <span className="font-medium text-ink">{gradeFor(avg)}</span> */}
+              {avg.toFixed(1)}/5 · {total} student review{total !== 1 ? 's' : ''}
             </p>
           ) : (
             <p className="text-ink-soft text-sm mt-2">No ratings yet</p>
