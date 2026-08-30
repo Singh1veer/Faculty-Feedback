@@ -116,22 +116,14 @@ function RatingWidget({ facultyId, onRated }) {
     setSelected(score);
     setSubmitting(true);
     const deviceToken = getOrCreateDeviceToken();
-
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/ratings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ facultyId, score, deviceToken }),
     });
     setSubmitting(false);
-
-    if (res.status === 409) {
-      setAlreadyRated(true);
-      return;
-    }
-    if (res.ok) {
-      setSubmitted(true);
-      if (onRated) onRated();
-    }
+    if (res.status === 409) { setAlreadyRated(true); return; }
+    if (res.ok) { setSubmitted(true); if (onRated) onRated(); }
   };
 
   const handleReRate = async () => {
@@ -143,39 +135,22 @@ function RatingWidget({ facultyId, onRated }) {
       body: JSON.stringify({ score: selected, deviceToken }),
     });
     setSubmitting(false);
-    if (res.ok) {
-      setSubmitted(true);
-      setAlreadyRated(false);
-      if (onRated) onRated();
-    }
+    if (res.ok) { setSubmitted(true); setAlreadyRated(false); if (onRated) onRated(); }
   };
 
   if (submitted) {
-    return (
-      <p className="font-mono text-sm text-ivy flex items-center gap-1 animate-[fadeIn_0.3s_ease]">
-        Thanks for rating {selected} ⭐
-      </p>
-    );
+    return <p className="font-mono text-sm text-ivy animate-[fadeIn_0.3s_ease]">Thanks for rating {selected} ⭐</p>;
   }
 
   if (alreadyRated) {
     return (
       <div className="flex flex-col gap-3 animate-[fadeIn_0.2s_ease]">
-        <p className="font-mono text-sm text-ink-soft">
-          You've already rated this faculty member.
-        </p>
+        <p className="text-sm text-ink-soft">You've already rated this faculty member.</p>
         <div className="flex gap-4">
-          <button
-            onClick={handleReRate}
-            disabled={submitting}
-            className="font-mono text-xs uppercase text-ivy border-b border-ivy/40 hover:border-ivy transition-colors duration-150 disabled:opacity-50"
-          >
+          <button onClick={handleReRate} disabled={submitting} className="font-mono text-xs uppercase text-ivy border-b border-ivy/40 hover:border-ivy transition-colors disabled:opacity-50">
             {submitting ? 'Saving…' : `Re-rate as ${selected} ⭐`}
           </button>
-          <button
-            onClick={() => setAlreadyRated(false)}
-            className="font-mono text-xs uppercase text-ink-soft hover:text-ink transition-colors duration-150"
-          >
+          <button onClick={() => setAlreadyRated(false)} className="font-mono text-xs uppercase text-ink-soft hover:text-ink transition-colors">
             Cancel
           </button>
         </div>
@@ -185,9 +160,7 @@ function RatingWidget({ facultyId, onRated }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft">
-        Rate this faculty member
-      </p>
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft">Your rating</p>
       <div className="flex gap-1" onMouseLeave={() => setHovered(0)}>
         {[1, 2, 3, 4, 5].map((n) => (
           <button
@@ -196,9 +169,7 @@ function RatingWidget({ facultyId, onRated }) {
             onMouseEnter={() => setHovered(n)}
             disabled={submitting}
             aria-label={`Rate ${n} star${n > 1 ? 's' : ''}`}
-            className={`text-3xl leading-none transition-transform duration-150 hover:scale-125 focus-visible:outline focus-visible:outline-brass focus-visible:outline-offset-2 disabled:opacity-40 ${
-              (hovered || selected) >= n ? 'text-brass' : 'text-rule'
-            }`}
+            className={`text-3xl leading-none transition-transform duration-150 hover:scale-125 disabled:opacity-40 ${(hovered || selected) >= n ? 'text-brass' : 'text-rule'}`}
           >
             ★
           </button>

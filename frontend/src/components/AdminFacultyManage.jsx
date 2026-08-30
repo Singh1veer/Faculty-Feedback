@@ -82,20 +82,20 @@ function AdminFacultyManage() {
   }
 
   return (
-    <div className="rounded-sm border border-rule bg-paper-raised p-5">
+    <div className="rounded-2xl bg-white shadow-sm p-6">
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <input
           value={name} onChange={e => setName(e.target.value)} placeholder="Name"
-          className="flex-1 border border-rule px-3 py-2 font-mono text-sm bg-paper outline-none focus:border-brass transition-colors duration-150"
+          className="flex-1 border border-rule rounded-full px-4 py-2 text-sm bg-paper outline-none focus:border-brass transition-colors duration-150"
         />
         <input
           value={department} onChange={e => setDepartment(e.target.value)} placeholder="Department"
-          className="flex-1 border border-rule px-3 py-2 font-mono text-sm bg-paper outline-none focus:border-brass transition-colors duration-150"
+          className="flex-1 border border-rule rounded-full px-4 py-2 text-sm bg-paper outline-none focus:border-brass transition-colors duration-150"
         />
         <button
           onClick={addFaculty}
           disabled={submitting}
-          className="bg-ivy text-paper font-mono text-xs uppercase py-2 px-5 hover:bg-ivy/90 transition-colors duration-150 disabled:opacity-50 whitespace-nowrap"
+          className="bg-ink text-paper font-mono text-xs uppercase py-2 px-5 rounded-full hover:bg-ink/90 transition-colors duration-150 disabled:opacity-50 whitespace-nowrap"
         >
           {submitting ? 'Adding…' : 'Add Faculty'}
         </button>
@@ -104,10 +104,10 @@ function AdminFacultyManage() {
       <div className="divide-y divide-rule">
         {faculty.map(f => (
           <div key={f.id} className="flex items-center justify-between py-3">
-            <span className="font-mono text-sm text-ink">{f.name} — {f.department}</span>
+            <span className="text-sm text-ink">{f.name} — <span className="text-ink-soft">{f.department}</span></span>
             <button
               onClick={() => deleteFaculty(f.id)}
-              className="font-mono text-[10px] uppercase text-oxblood/80 hover:text-oxblood transition-colors duration-150"
+              className="font-mono text-[10px] uppercase text-oxblood/70 hover:text-oxblood transition-colors duration-150"
             >
               Delete
             </button>

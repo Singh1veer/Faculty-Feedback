@@ -52,20 +52,20 @@ function AdminUserSuspend() {
   }
 
   return (
-    <div className="rounded-sm border border-rule bg-paper-raised p-5">
+    <div className="rounded-2xl bg-white shadow-sm p-6">
       <div className="flex flex-col sm:flex-row gap-3">
         <input
           value={userId} onChange={e => setUserId(e.target.value)} placeholder="User ID (UUID)"
-          className="flex-1 border border-rule px-3 py-2 font-mono text-sm bg-paper outline-none focus:border-brass transition-colors duration-150"
+          className="flex-1 border border-rule rounded-full px-4 py-2 text-sm bg-paper outline-none focus:border-brass transition-colors duration-150"
         />
         <input
           value={reason} onChange={e => setReason(e.target.value)} placeholder="Reason (optional)"
-          className="flex-1 border border-rule px-3 py-2 font-mono text-sm bg-paper outline-none focus:border-brass transition-colors duration-150"
+          className="flex-1 border border-rule rounded-full px-4 py-2 text-sm bg-paper outline-none focus:border-brass transition-colors duration-150"
         />
         <button
           onClick={suspendUser}
           disabled={submitting}
-          className="bg-oxblood text-paper font-mono text-xs uppercase py-2 px-5 hover:bg-oxblood/90 transition-colors duration-150 disabled:opacity-50 whitespace-nowrap"
+          className="bg-oxblood text-paper font-mono text-xs uppercase py-2 px-5 rounded-full hover:bg-oxblood/90 transition-colors duration-150 disabled:opacity-50 whitespace-nowrap"
         >
           {submitting ? 'Suspending…' : 'Suspend'}
         </button>

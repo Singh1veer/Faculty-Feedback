@@ -205,6 +205,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
+import RatingWidget from './RatingWidget';
 import GoogleSignIn from './GoogleSignIn';
 
 function CommentsPage() {
@@ -259,44 +260,50 @@ function CommentsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-paper px-6 py-16">
+    <div className="min-h-screen bg-paper px-6 py-14">
       <div className="max-w-md mx-auto">
         <Link
           to={`/faculty/${name}`}
-          className="inline-block text-xs font-mono uppercase tracking-wider text-ivy border-b border-ivy/40 hover:border-ivy transition-colors duration-150"
+          className="inline-block text-xs font-mono uppercase tracking-wider text-ivy border-b border-ivy/40 hover:border-ivy transition-colors duration-150 mb-6"
         >
           ← Back to {faculty.name}
         </Link>
 
-        <h1 className="font-display text-3xl text-ink mt-4 mb-8">
-          Comments on {faculty.name}
+        <h1 className="font-display text-3xl text-ink mb-8">
+          Write a review · {faculty.name}
         </h1>
 
         {!isVerified && (
-          <div className="mb-10 rounded-sm border border-rule bg-paper-raised p-6">
-            <p className="font-mono text-sm text-ink-soft mb-4">
-              Sign in with your college account to write a comment.
+          <div className="rounded-2xl bg-white shadow-sm p-6 mb-8">
+            <p className="text-ink-soft text-sm mb-4">
+              Sign in with your college account to rate and comment.
             </p>
             <GoogleSignIn />
           </div>
         )}
 
         {isVerified && !semester && (
-          <div className="mb-10 rounded-sm border border-rule bg-paper-raised p-6">
-            <p className="font-mono text-sm text-ink-soft mb-3">One more step — your semester:</p>
+          <div className="rounded-2xl bg-white shadow-sm p-6 mb-8">
+            <p className="text-ink-soft text-sm mb-3">One more step — your semester:</p>
             <div className="flex flex-col sm:flex-row gap-3">
               <select
                 value={semesterInput}
                 onChange={e => setSemesterInput(e.target.value)}
-                className="border border-rule px-3 py-2 font-mono text-sm bg-paper flex-1"
+                className="border border-rule rounded-full px-4 py-2 text-sm bg-paper flex-1 outline-none focus:border-brass transition-colors"
               >
                 <option value="">Select…</option>
-                <option value="2026-Spring">Spring 2026</option>
-                <option value="2026-Fall">Fall 2026</option>
+                <option value="Semester 1">1st</option>
+                <option value="Semester 2">2nd</option>
+                <option value="Semester 3">3rd</option>
+                <option value="Semester 4">4th</option>
+                <option value="Semester 5">5th</option>
+                <option value="Semester 6">6th</option>
+                <option value="Semester 7">7th</option>
+                <option value="Semester 8">8th</option>
               </select>
               <button
                 onClick={saveSemester}
-                className="bg-ivy text-paper font-mono text-xs uppercase py-2 px-5 hover:bg-ivy/90 transition-colors duration-150"
+                className="bg-ink text-paper font-mono text-xs uppercase py-2 px-5 rounded-full hover:bg-ink/90 transition-colors duration-150"
               >
                 Continue
               </button>
@@ -305,7 +312,10 @@ function CommentsPage() {
         )}
 
         {isVerified && semester && (
-          <div className="mb-10">
+          <div className="space-y-4 mb-10">
+            <div className="rounded-2xl bg-white shadow-sm p-6">
+              <RatingWidget facultyId={faculty.id} onRated={() => {}} />
+            </div>
             <CommentForm
               facultyId={faculty.id}
               semester={semester}
@@ -315,7 +325,7 @@ function CommentsPage() {
         )}
 
         <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft border-t border-rule pt-6 mb-4">
-          All comments
+          All reviews
         </h3>
         <CommentList facultyId={faculty.id} refreshKey={commentRefreshKey} />
       </div>

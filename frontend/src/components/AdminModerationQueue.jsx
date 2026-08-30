@@ -69,24 +69,37 @@ function AdminModerationQueue() {
     }).then(fetchPending);
   }
 
-  if (loading) return <p className="font-mono text-sm text-ink-soft animate-pulse">Loading…</p>;
-  if (pending.length === 0) return <p className="font-mono text-sm text-ink-soft italic">Nothing pending.</p>;
+  if (loading) {
+    return (
+      <div className="rounded-2xl bg-white shadow-sm p-6">
+        <p className="font-mono text-sm text-ink-soft animate-pulse">Loading…</p>
+      </div>
+    );
+  }
+
+  if (pending.length === 0) {
+    return (
+      <div className="rounded-2xl bg-white shadow-sm p-6">
+        <p className="text-sm text-ink-soft italic">Nothing pending.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-3">
+    <div className="rounded-2xl bg-white shadow-sm divide-y divide-rule overflow-hidden">
       {pending.map(c => (
-        <div key={c.id} className="rounded-sm border border-rule bg-paper-raised p-4">
+        <div key={c.id} className="p-5">
           <p className="text-ink text-sm mb-3">{c.text}</p>
           <div className="flex gap-3">
             <button
               onClick={() => moderate(c.id, 'approved')}
-              className="font-mono text-[10px] uppercase bg-ivy text-paper py-1.5 px-4 hover:bg-ivy/90 transition-colors duration-150"
+              className="font-mono text-[10px] uppercase bg-ink text-paper py-1.5 px-4 rounded-full hover:bg-ink/90 transition-colors duration-150"
             >
               Approve
             </button>
             <button
               onClick={() => moderate(c.id, 'rejected')}
-              className="font-mono text-[10px] uppercase border border-oxblood/40 text-oxblood py-1.5 px-4 hover:bg-oxblood/5 transition-colors duration-150"
+              className="font-mono text-[10px] uppercase border border-oxblood/40 text-oxblood py-1.5 px-4 rounded-full hover:bg-oxblood/5 transition-colors duration-150"
             >
               Reject
             </button>

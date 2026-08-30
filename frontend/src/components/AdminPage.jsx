@@ -136,37 +136,45 @@ function AdminPage() {
   if (!isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-paper px-6">
-        <div className="max-w-sm text-center">
+        <div className="max-w-sm w-full rounded-2xl bg-white shadow-sm p-8 text-center">
           <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-oxblood mb-2">Restricted</p>
           <h1 className="font-display text-2xl text-ink mb-6">Admin verification required</h1>
-          <GoogleSignIn />
+          <div className="flex justify-center">
+            <GoogleSignIn />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-paper px-6 py-16">
+    <div className="min-h-screen bg-paper px-6 py-14">
       <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between border-b-2 border-ink pb-6 mb-10">
-          <h1 className="font-display italic text-4xl text-ink">Admin Dashboard</h1>
-          <button onClick={signOut} className="font-mono text-[11px] uppercase tracking-wider text-ink-soft hover:text-oxblood transition-colors duration-150">
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-oxblood">Internal</p>
+            <h1 className="font-display text-4xl text-ink mt-1">Admin Dashboard</h1>
+          </div>
+          <button
+            onClick={signOut}
+            className="font-mono text-xs uppercase text-ink-soft hover:text-oxblood transition-colors duration-150"
+          >
             Sign out
           </button>
         </div>
 
-        <section className="mb-12">
-          <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-brass-dark mb-4">Manage Faculty</h2>
+        <section className="mb-10">
+          <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft mb-3">Manage Faculty</h2>
           <AdminFacultyManage />
         </section>
 
-        <section className="mb-12">
-          <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-brass-dark mb-4">Moderation Queue</h2>
+        <section className="mb-10">
+          <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft mb-3">Moderation Queue</h2>
           <AdminModerationQueue />
         </section>
 
         <section>
-          <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-brass-dark mb-4">Suspend User</h2>
+          <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft mb-3">Suspend User</h2>
           <AdminUserSuspend />
         </section>
       </div>

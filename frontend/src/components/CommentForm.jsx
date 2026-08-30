@@ -88,21 +88,21 @@ function CommentForm({ facultyId, semester, onCommentSubmitted }) {
   };
 
   return (
-    <div className="rounded-sm border border-rule bg-paper-raised p-5">
+    <div className="rounded-2xl bg-white shadow-sm p-6">
       <textarea
         value={text}
         onChange={e => setText(e.target.value)}
         placeholder="Share your experience…"
         rows={4}
-        className="w-full bg-transparent border border-rule px-3 py-2 font-mono text-sm text-ink placeholder-ink-soft/50 outline-none focus:border-brass transition-colors duration-200 resize-none"
+        className="w-full bg-paper-raised/40 border border-rule rounded-xl px-4 py-3 text-sm text-ink placeholder-ink-soft/50 outline-none focus:border-brass transition-colors duration-200 resize-none"
       />
-      <div className="flex items-center justify-between mt-3">
+      <div className="flex items-center justify-between mt-4">
         <button
           onClick={handleSubmit}
           disabled={submitting || !text.trim()}
-          className="bg-ivy text-paper font-mono text-xs uppercase py-2 px-5 hover:bg-ivy/90 active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="bg-ink text-paper font-mono text-xs uppercase py-2.5 px-6 rounded-full hover:bg-ink/90 active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {submitting ? 'Submitting…' : 'Submit Comment'}
+          {submitting ? 'Submitting…' : 'Submit Review'}
         </button>
         <span className="font-mono text-[10px] text-ink-soft">{semester}</span>
       </div>

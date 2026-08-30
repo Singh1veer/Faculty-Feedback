@@ -63,6 +63,24 @@ app.get("/api/faculty/:id/rating-summary", async (req, res) => {
   }
 });
 
+app.get("/api/faculty/:id/rating-breakdown", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query(
+      `SELECT score, COUNT(*) AS count FROM rating WHERE faculty_id = $1 GROUP BY score`,
+      [id]
+    );
+    const breakdown = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    result.rows.forEach(row => { breakdown[row.score] = parseInt(row.count); });
+    res.json(breakdown);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+
+
 app.get("/api/faculty/:name", async (req, res) => {
   try {
     const { name } = req.params;

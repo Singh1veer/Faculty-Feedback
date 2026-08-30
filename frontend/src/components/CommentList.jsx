@@ -44,21 +44,25 @@ function CommentList({ facultyId, refreshKey }) {
   if (loading) {
     return (
       <div className="space-y-3">
-        {[1, 2].map(i => <div key={i} className="h-16 bg-paper-raised/60 rounded-sm animate-pulse" />)}
+        {[1, 2].map(i => <div key={i} className="h-16 bg-white/60 rounded-2xl animate-pulse" />)}
       </div>
     );
   }
 
   if (comments.length === 0) {
-    return <p className="font-mono text-sm text-ink-soft italic">No comments yet — be the first to share.</p>;
+    return (
+      <div className="rounded-2xl bg-white shadow-sm p-6 text-center">
+        <p className="text-ink-soft text-sm italic">No reviews yet — be the first to share.</p>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="rounded-2xl bg-white shadow-sm divide-y divide-rule overflow-hidden">
       {comments.map(c => (
-        <div key={c.id} className="border-l-2 border-rule pl-4 py-1">
-          <p className="text-ink text-sm leading-relaxed">{c.text}</p>
-          <p className="font-mono text-[10px] uppercase tracking-wider text-ink-soft mt-1">{c.semester}</p>
+        <div key={c.id} className="p-5">
+          <p className="italic text-ink text-sm leading-relaxed">"{c.text}"</p>
+          <p className="font-mono text-[10px] uppercase tracking-wider text-ink-soft mt-2">{c.semester}</p>
         </div>
       ))}
     </div>
