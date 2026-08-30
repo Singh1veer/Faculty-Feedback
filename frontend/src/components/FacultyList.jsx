@@ -164,9 +164,9 @@ function FacultyList() {
         <div className="flex items-start justify-between mb-8">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-oxblood">
-              Student-submitted · Fall 2026
+              FACULTY METRICS
             </p>
-            <h1 className="font-display text-4xl text-ink mt-1">Faculty Metrics</h1>
+            <h1 className="font-display text-4xl text-ink mt-1">The Faculty Files</h1>
             <p className="text-ink-soft text-sm mt-1">{faculty.length} professors on file</p>
           </div>
           {isSignedIn && (
@@ -196,13 +196,15 @@ function FacultyList() {
             <option value="">All departments</option>
             <option value="CHED">Chemical</option>
             <option value="Chemistry & Biochemistry">Chemistry and Biochem</option>
-            <option value="CID">Civil Dept.</option>
+            <option value="CED">Civil</option>
             <option value="CSED">CSED</option>
             <option value="ECED">ECED</option>
-             <option value="DEIE">Electronics and Instr.</option>
-            <option value="Humanities">Humanities Dept.</option>
-              <option value="Mathemtics">Mathematics Dept.</option>
-            <option value="Physics">Physics Dept.</option>
+             <option value="DEIE">DEIE</option>
+            <option value="Humanities">Humanities</option>
+            <option value="Mathemtics">Mathematics</option>
+            <option value="MED">Mechanical</option>
+            <option value="BTD">BioTech</option>
+            <option value="Physics">Physics</option>
   
           </select>
         </div>

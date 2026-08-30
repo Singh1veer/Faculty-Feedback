@@ -283,7 +283,7 @@ function CommentsPage() {
 
         {isVerified && !semester && (
           <div className="rounded-2xl bg-white shadow-sm p-6 mb-8">
-            <p className="text-ink-soft text-sm mb-3">One more step — your semester:</p>
+            <p className="text-ink-soft text-sm mb-3">One more step — your semester with this prof?</p>
             <div className="flex flex-col sm:flex-row gap-3">
               <select
                 value={semesterInput}
