@@ -106,15 +106,27 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { signOut } from '../lib/auth';
 
+const AVATAR_COLORS = [
+  'bg-brass/20 text-brass-dark',
+  'bg-oxblood/15 text-oxblood',
+  'bg-ivy/15 text-ivy',
+  'bg-ink/10 text-ink-soft',
+];
+
 function initials(name) {
   return name.replace(/^Dr\.\s*/i, '').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+function colorFor(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
 function FacultyList() {
   const [faculty, setFaculty] = useState([]);
   const [searchName, setSearchName] = useState('');
   const [searchDept, setSearchDept] = useState('');
-  const [expanded, setExpanded] = useState(null);
   const [loading, setLoading] = useState(true);
   const isSignedIn = !!localStorage.getItem('access_token');
 
@@ -140,7 +152,10 @@ function FacultyList() {
             <p className="text-ink-soft text-sm mt-1">{faculty.length} professors on file</p>
           </div>
           {isSignedIn && (
-            <button onClick={signOut} className="font-mono text-xs uppercase text-ink-soft hover:text-oxblood transition-colors">
+            <button
+              onClick={signOut}
+              className="font-mono text-xs uppercase tracking-wide text-ink-soft hover:text-oxblood transition-colors duration-150 mt-2"
+            >
               Sign out
             </button>
           )}
@@ -148,7 +163,7 @@ function FacultyList() {
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="flex-1 relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-soft">🔍</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-soft text-sm">🔍</span>
             <input
               value={searchName}
               onChange={e => setSearchName(e.target.value)}
@@ -168,63 +183,36 @@ function FacultyList() {
         <div className="rounded-2xl bg-white shadow-sm overflow-hidden divide-y divide-rule">
           {loading && (
             <div className="p-6 space-y-4">
-              {[1,2,3].map(i => <div key={i} className="h-12 bg-paper-raised/60 rounded animate-pulse" />)}
+              {[1, 2, 3].map(i => <div key={i} className="h-14 bg-paper-raised/60 rounded animate-pulse" />)}
             </div>
           )}
           {!loading && faculty.length === 0 && (
             <p className="p-8 text-center text-sm text-ink-soft">No matching records.</p>
           )}
-          {!loading && faculty.map(f => (
-            <div key={f.id}>
-              <button
-                onClick={() => setExpanded(expanded === f.id ? null : f.id)}
-                className="w-full flex items-center gap-4 px-5 py-4 hover:bg-paper-raised/50 transition-colors text-left"
+          {!loading && faculty.map(f => {
+            const avg = parseFloat(f.average) || 0;
+            const total = parseInt(f.total) || 0;
+            return (
+              <Link
+                key={f.id}
+                to={`/faculty/${f.name}`}
+                className="flex items-center gap-4 px-5 py-4 hover:bg-paper-raised/50 transition-colors duration-150"
               >
-                <div className="w-11 h-11 rounded-full bg-brass/20 flex items-center justify-center font-mono text-sm text-brass-dark font-medium shrink-0">
+                <div className={`w-11 h-11 rounded-full flex items-center justify-center font-mono text-sm font-medium shrink-0 ${colorFor(f.name)}`}>
                   {initials(f.name)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-display text-lg text-ink truncate">{f.name}</p>
-                  <p className="text-ink-soft text-sm truncate">{f.department}</p>
+                  <p className="text-ink-soft text-sm truncate">
+                    {f.department}{total > 0 ? ` · ${avg.toFixed(1)}/5 · ${total} review${total !== 1 ? 's' : ''}` : ' · No reviews yet'}
+                  </p>
                 </div>
-                <span className={`text-ink-soft transition-transform duration-200 ${expanded === f.id ? 'rotate-90' : ''}`}>›</span>
-              </button>
-
-              {expanded === f.id && (
-                <FacultyPreview facultyId={f.id} name={f.name} />
-              )}
-            </div>
-          ))}
+                <span className="text-ink-soft">›</span>
+              </Link>
+            );
+          })}
         </div>
       </div>
-    </div>
-  );
-}
-
-function FacultyPreview({ facultyId, name }) {
-  const [summary, setSummary] = useState(null);
-  const [comments, setComments] = useState([]);
-
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${facultyId}/rating-summary`)
-      .then(res => res.json()).then(setSummary);
-    fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${facultyId}/comments`)
-      .then(res => res.json()).then(data => setComments(data.slice(0, 1)));
-  }, [facultyId]);
-
-  return (
-    <div className="px-5 pb-5 bg-paper-raised/30 animate-[fadeIn_0.2s_ease]">
-      {comments[0] && (
-        <p className="text-ink italic text-sm border-l-2 border-brass pl-3 py-1 mb-3">
-          "{comments[0].text}"
-        </p>
-      )}
-      <Link
-        to={`/faculty/${name}`}
-        className="font-mono text-xs uppercase text-oxblood hover:underline"
-      >
-        View full record →
-      </Link>
     </div>
   );
 }

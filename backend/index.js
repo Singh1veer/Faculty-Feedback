@@ -28,7 +28,14 @@ app.get("/api/faculty", async (req, res) => {
   try {
     const { department, name } = req.query;
     
-    let query = "SELECT * FROM faculty WHERE 1=1";
+        let query = `
+      SELECT f.*,
+        COALESCE(AVG(r.score), 0)::numeric(10,1) AS average,
+        COUNT(r.id) AS total
+      FROM faculty f
+      LEFT JOIN rating r ON r.faculty_id = f.id
+      WHERE 1=1
+    `;
     const values = [];
     
     if (department) {
