@@ -143,6 +143,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { signOut } from '../lib/auth';
+import RatingWidget from './RatingWidget';
 
 function initials(name) {
   return name.replace(/^Dr\.\s*/i, '').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -174,13 +175,17 @@ function FacultyProfile() {
 
   useEffect(() => {
     if (!faculty) return;
+    fetchRatings();
+    fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${faculty.id}/comments`)
+      .then(res => res.json()).then(setComments);
+  }, [faculty]);
+
+  function fetchRatings() {
     fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${faculty.id}/rating-summary`)
       .then(res => res.json()).then(setRatingSummary);
     fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${faculty.id}/rating-breakdown`)
       .then(res => res.json()).then(setBreakdown);
-    fetch(`${import.meta.env.VITE_API_URL}/api/faculty/${faculty.id}/comments`)
-      .then(res => res.json()).then(setComments);
-  }, [faculty]);
+  }
 
   if (notFound) {
     return (
@@ -238,6 +243,10 @@ function FacultyProfile() {
           ) : (
             <p className="text-ink-soft text-sm mt-2">No ratings yet</p>
           )}
+
+          <div className="mt-5 pt-5 border-t border-rule">
+            <RatingWidget facultyId={faculty.id} onRated={fetchRatings} />
+          </div>
         </div>
 
         {/* Rating breakdown */}
@@ -257,6 +266,35 @@ function FacultyProfile() {
                   <span className="w-6 text-right font-mono text-ink-soft text-xs">{breakdown[star]}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Lab & contact */}
+        {(faculty.researchLab || faculty.office || faculty.email) && (
+          <div className="rounded-2xl bg-white shadow-sm p-6 mb-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft mb-4">Lab &amp; contact</p>
+            <div className="space-y-3 text-sm">
+              {faculty.researchLab && (
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-ink-soft shrink-0">Research Lab</span>
+                  <span className="text-ink text-right">{faculty.researchLab}</span>
+                </div>
+              )}
+              {faculty.office && (
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-ink-soft shrink-0">Office</span>
+                  <span className="text-ink text-right">{faculty.office}</span>
+                </div>
+              )}
+              {faculty.email && (
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-ink-soft shrink-0">Email</span>
+                  <a href={`mailto:${faculty.email}`} className="text-ink text-right hover:text-brass-dark transition-colors">
+                    {faculty.email}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         )}

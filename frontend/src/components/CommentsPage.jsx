@@ -205,7 +205,6 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
-import RatingWidget from './RatingWidget';
 import GoogleSignIn from './GoogleSignIn';
 
 function CommentsPage() {
@@ -312,10 +311,7 @@ function CommentsPage() {
         )}
 
         {isVerified && semester && (
-          <div className="space-y-4 mb-10">
-            <div className="rounded-2xl bg-white shadow-sm p-6">
-              <RatingWidget facultyId={faculty.id} onRated={() => {}} />
-            </div>
+          <div className="mb-10">
             <CommentForm
               facultyId={faculty.id}
               semester={semester}
