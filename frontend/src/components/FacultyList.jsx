@@ -194,7 +194,7 @@ function FacultyList() {
             className="rounded-full bg-white border border-rule px-4 py-3 text-sm outline-none focus:border-brass transition-colors"
           >
             <option value="">All departments</option>
-            <option value="Chemical">Chemical Dept.</option>
+            <option value="CHED">Chemical</option>
             <option value="Chemistry & Biochemistry">Chemistry and Biochem</option>
             <option value="CID">Civil Dept.</option>
             <option value="CSED">CSED</option>
