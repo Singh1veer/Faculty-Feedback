@@ -105,7 +105,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { signOut } from '../lib/auth';
-
+import { getOrCreateDeviceToken } from '../lib/deviceToken';
 const AVATAR_COLORS = [
   'bg-brass/20 text-brass-dark',
   'bg-oxblood/15 text-oxblood',
@@ -130,7 +130,22 @@ function FacultyList() {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
   const [detailCache, setDetailCache] = useState({});
+  const [stats, setStats] = useState(null);
   const isSignedIn = !!localStorage.getItem('access_token');
+
+  useEffect(() => {
+    const deviceToken = getOrCreateDeviceToken();
+    fetch(`${import.meta.env.VITE_API_URL}/api/visits`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ deviceToken }),
+    }).catch(() => {});
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/stats`)
+      .then(res => res.json())
+      .then(setStats)
+      .catch(err => console.error('Failed to load stats:', err));
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -158,6 +173,7 @@ function FacultyList() {
     }
   }
 
+
   return (
     <div className="min-h-screen bg-paper">
       <div className="mx-auto max-w-2xl px-6 py-14">
@@ -168,6 +184,19 @@ function FacultyList() {
             </p>
             <h1 className="font-display text-4xl text-ink mt-1">The Faculty Files</h1>
             <p className="text-ink-soft text-sm mt-1">{faculty.length} professors on file</p>
+
+            {stats && (
+                <div className="inline-flex items-center gap-2 mt-4 rounded-full bg-white border border-rule px-4 py-2 text-sm text-ink-soft shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-ivy shrink-0" />
+                  <span>
+                    <span className="text-ink font-medium">{stats.visitors.toLocaleString()}+</span> students
+                    <span className="text-rule mx-2">·</span>
+                    <span className="text-ink font-medium">{stats.ratings.toLocaleString()}</span> ratings
+                    <span className="text-rule mx-2">·</span>
+                    <span className="text-ink font-medium">{stats.comments.toLocaleString()}</span> reviews
+                  </span>
+                </div>
+          )}
           </div>
           {isSignedIn && (
             <button
@@ -178,6 +207,7 @@ function FacultyList() {
             </button>
           )}
         </div>
+
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="flex-1 relative">
