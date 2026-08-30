@@ -185,18 +185,7 @@ function FacultyList() {
             <h1 className="font-display text-4xl text-ink mt-1">The Faculty Files</h1>
             <p className="text-ink-soft text-sm mt-1">{faculty.length} professors on file</p>
 
-            {stats && (
-                <div className="inline-flex items-center gap-2 mt-4 rounded-full bg-white border border-rule px-4 py-2 text-sm text-ink-soft shadow-sm">
-                  <span className="w-2 h-2 rounded-full bg-ivy shrink-0" />
-                  <span>
-                    <span className="text-ink font-medium">{stats.visitors.toLocaleString()}+</span> students
-                    <span className="text-rule mx-2">·</span>
-                    <span className="text-ink font-medium">{stats.ratings.toLocaleString()}</span> ratings
-                    <span className="text-rule mx-2">·</span>
-                    <span className="text-ink font-medium">{stats.comments.toLocaleString()}</span> reviews
-                  </span>
-                </div>
-          )}
+            
           </div>
           {isSignedIn && (
             <button
@@ -208,6 +197,18 @@ function FacultyList() {
           )}
         </div>
 
+{stats && (
+                <div className="inline-flex items-center gap-2 mt-4 rounded-full bg-white border border-rule px-4 py-2 text-sm text-ink-soft shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-ivy shrink-0" />
+                  <span>
+                    <span className="text-ink font-medium">{stats.visitors.toLocaleString()}+</span> students
+                    <span className="text-rule mx-2">·</span>
+                    <span className="text-ink font-medium">{stats.ratings.toLocaleString()}</span> ratings
+                    <span className="text-rule mx-2">·</span>
+                    <span className="text-ink font-medium">{stats.comments.toLocaleString()}</span> comments
+                  </span>
+                </div>
+          )}
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="flex-1 relative">
