@@ -102,7 +102,7 @@
 // export default FacultyList;
 
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { signOut } from '../lib/auth';
 
@@ -123,97 +123,14 @@ function colorFor(name) {
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
-function DepartmentDropdown({ departments, value, onChange }) {
-  const [open, setOpen] = useState(false);
-  const rootRef = useRef(null);
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false);
-    }
-    function handleEscape(e) {
-      if (e.key === 'Escape') setOpen(false);
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, []);
-
-  const options = ['', ...departments];
-
-  return (
-    <div ref={rootRef} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen(o => !o)}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        className={`flex items-center gap-2 rounded-full bg-white border px-4 py-3 text-sm outline-none transition-colors min-w-[9.5rem] justify-between ${
-          open ? 'border-brass' : 'border-rule hover:border-ink/20'
-        }`}
-      >
-        <span className={value ? 'text-ink' : 'text-ink-soft'}>{value || 'All departments'}</span>
-        <svg
-          width="12" height="12" viewBox="0 0 12 12" fill="none"
-          className={`shrink-0 text-ink-soft transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
-        >
-          <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-
-      <div
-        className={`absolute right-0 z-20 mt-2 w-56 origin-top-right transition-all duration-150 ease-out ${
-          open ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 -translate-y-1 pointer-events-none'
-        }`}
-      >
-        <div className="rounded-2xl bg-white border border-rule shadow-lg overflow-hidden">
-          <div className="max-h-72 overflow-y-auto py-1.5">
-            {options.map(dept => {
-              const selected = dept === value;
-              return (
-                <button
-                  key={dept || '__all__'}
-                  type="button"
-                  onClick={() => { onChange(dept); setOpen(false); }}
-                  className={`w-full flex items-center justify-between gap-3 text-left px-4 py-2.5 text-sm transition-colors ${
-                    selected ? 'bg-brass/10 text-brass-dark font-medium' : 'text-ink hover:bg-paper-raised/60'
-                  }`}
-                >
-                  <span className="truncate">{dept || 'All departments'}</span>
-                  {selected && (
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
-                      <path d="M3 7.5L5.5 10L11 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function FacultyList() {
   const [faculty, setFaculty] = useState([]);
-  const [departments, setDepartments] = useState([]);
   const [searchName, setSearchName] = useState('');
   const [searchDept, setSearchDept] = useState('');
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
   const [detailCache, setDetailCache] = useState({});
   const isSignedIn = !!localStorage.getItem('access_token');
-
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/departments`)
-      .then(res => res.json())
-      .then(setDepartments)
-      .catch(() => {});
-  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -249,7 +166,7 @@ function FacultyList() {
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-oxblood">
               Student-submitted · Fall 2026
             </p>
-            <h1 className="font-display text-4xl text-ink mt-1">Professor Report Card</h1>
+            <h1 className="font-display text-4xl text-ink mt-1">Faculty Metrics</h1>
             <p className="text-ink-soft text-sm mt-1">{faculty.length} professors on file</p>
           </div>
           {isSignedIn && (
@@ -264,7 +181,6 @@ function FacultyList() {
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="flex-1 relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-soft text-sm">🔍</span>
             <input
               value={searchName}
               onChange={e => setSearchName(e.target.value)}
@@ -272,11 +188,23 @@ function FacultyList() {
               className="w-full rounded-full bg-white border border-rule pl-10 pr-4 py-3 text-sm outline-none focus:border-brass transition-colors"
             />
           </div>
-          <DepartmentDropdown
-            departments={departments}
+          <select
             value={searchDept}
-            onChange={setSearchDept}
-          />
+            onChange={e => setSearchDept(e.target.value)}
+            className="rounded-full bg-white border border-rule px-4 py-3 text-sm outline-none focus:border-brass transition-colors"
+          >
+            <option value="">All departments</option>
+            <option value="Chemical">Chemical Dept.</option>
+            <option value="Chemistry & Biochemistry">Chemistry and Biochem</option>
+            <option value="CID">Civil Dept.</option>
+            <option value="CSED">CSED</option>
+            <option value="ECED">ECED</option>
+             <option value="DEIE">Electronics and Instr.</option>
+            <option value="Humanities">Humanities Dept.</option>
+              <option value="Mathemtics">Mathematics Dept.</option>
+            <option value="Physics">Physics Dept.</option>
+  
+          </select>
         </div>
 
         <div className="rounded-2xl bg-white shadow-sm overflow-hidden divide-y divide-rule">
