@@ -198,9 +198,11 @@ function FacultyList() {
             <option value="CID">Civil Dept.</option>
             <option value="CSED">CSED</option>
             <option value="ECED">ECED</option>
+             <option value="DEIE">Electronics and Instr.</option>
             <option value="Humanities">Humanities Dept.</option>
+              <option value="Mathemtics">Mathematics Dept.</option>
             <option value="Physics">Physics Dept.</option>
-            <option value="Mathemtics">Mathematics Dept.</option>
+  
           </select>
         </div>
 
