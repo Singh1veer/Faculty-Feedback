@@ -271,20 +271,26 @@ function FacultyProfile() {
         )}
 
         {/* Lab & contact */}
-        {(faculty.researchLab || faculty.office || faculty.email) && (
+        {(faculty.designation || faculty.location || faculty.researchLab || faculty.office || faculty.email) && (
           <div className="rounded-2xl bg-white shadow-sm p-6 mb-4">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft mb-4">Lab &amp; contact</p>
             <div className="space-y-3 text-sm">
+              {faculty.designation && (
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-ink-soft shrink-0">Designation</span>
+                  <span className="text-ink text-right">{faculty.designation}</span>
+                </div>
+              )}
               {faculty.researchLab && (
                 <div className="flex items-baseline justify-between gap-4">
                   <span className="text-ink-soft shrink-0">Research Lab</span>
                   <span className="text-ink text-right">{faculty.researchLab}</span>
                 </div>
               )}
-              {faculty.office && (
+              {(faculty.location || faculty.office) && (
                 <div className="flex items-baseline justify-between gap-4">
                   <span className="text-ink-soft shrink-0">Office</span>
-                  <span className="text-ink text-right">{faculty.office}</span>
+                  <span className="text-ink text-right">{faculty.location || faculty.office}</span>
                 </div>
               )}
               {faculty.email && (
