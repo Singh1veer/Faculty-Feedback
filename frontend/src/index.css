@@ -1,4 +1,43 @@
+/* @import "tailwindcss";
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+} */
+
 @import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Paper / background */
+  --color-paper: #f6f3ec;
+  --color-paper-raised: #ece6d7;
+
+  /* Ink / text */
+  --color-ink: #221d15;
+  --color-ink-soft: #8c8577;
+
+  /* Lines */
+  --color-rule: #e2dccb;
+
+  /* Accents */
+  --color-brass: #b8925a;
+  --color-brass-dark: #8f6f42;
+  --color-oxblood: #7a2e2e;
+  --color-ivy: #3f6b52;
+}
+
 body {
   background: var(--color-paper);
   color: var(--color-ink);
