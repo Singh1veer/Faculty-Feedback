@@ -24,12 +24,36 @@ const ratingLimiter = rateLimit({
   max: 1,
   message: { error: '1 rating per faculty' },
 });
+// app.get("/api/faculty", async (req, res) => {
+//   try {
+//     const { department, name } = req.query;
+    
+//     let query = "SELECT * FROM faculty WHERE 1=1";
+//     const values = [];
+    
+//     if (department) {
+//       values.push(`%${department}%`);
+//       query += ` AND department ILIKE $${values.length}`;
+//     }
+
+//     if (name) {
+//       values.push(`%${name}%`);
+//       query += ` AND name ILIKE $${values.length}`;
+//     }
+
+//     const result = await pool.query(query, values);
+//     res.json(result.rows);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Something went wrong" });
+//   }
+// });
 app.get("/api/faculty", async (req, res) => {
   try {
     const { department, name } = req.query;
-    
-        let query = `
-      SELECT f.*,
+
+    let query = `
+      SELECT f.id, f.name, f.department,
         COALESCE(AVG(r.score), 0)::numeric(10,1) AS average,
         COUNT(r.id) AS total
       FROM faculty f
@@ -37,16 +61,17 @@ app.get("/api/faculty", async (req, res) => {
       WHERE 1=1
     `;
     const values = [];
-    
+
     if (department) {
       values.push(`%${department}%`);
-      query += ` AND department ILIKE $${values.length}`;
+      query += ` AND f.department ILIKE $${values.length}`;
     }
-
     if (name) {
       values.push(`%${name}%`);
-      query += ` AND name ILIKE $${values.length}`;
+      query += ` AND f.name ILIKE $${values.length}`;
     }
+
+    query += ` GROUP BY f.id, f.name, f.department ORDER BY f.name`;
 
     const result = await pool.query(query, values);
     res.json(result.rows);
@@ -55,6 +80,7 @@ app.get("/api/faculty", async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
+
 
 app.get("/api/faculty/:id/rating-summary", async (req, res) => {
   try {
