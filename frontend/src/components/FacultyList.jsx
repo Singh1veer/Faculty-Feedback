@@ -105,7 +105,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { signOut } from '../lib/auth';
-
+import { getOrCreateDeviceToken } from '../lib/deviceToken';
 const AVATAR_COLORS = [
   'bg-brass/20 text-brass-dark',
   'bg-oxblood/15 text-oxblood',
@@ -130,6 +130,7 @@ function FacultyList() {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
   const [detailCache, setDetailCache] = useState({});
+  const [stats, setStats] = useState(null);
   const isSignedIn = !!localStorage.getItem('access_token');
 
 useEffect(() => {
@@ -166,16 +167,30 @@ useEffect(() => {
     }
   }
 
+
   return (
     <div className="min-h-screen bg-paper">
       <div className="mx-auto max-w-2xl px-6 py-14">
         <div className="flex items-start justify-between mb-8">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-oxblood">
-              Student-submitted · Fall 2026
+              FACULTY METRICS
             </p>
-            <h1 className="font-display text-4xl text-ink mt-1">Faculty Metrics</h1>
+            <h1 className="font-display text-4xl text-ink mt-1">The Faculty Files</h1>
             <p className="text-ink-soft text-sm mt-1">{faculty.length} professors on file</p>
+
+            {stats && (
+                <div className="inline-flex items-center gap-2 mt-4 rounded-full bg-white border border-rule px-4 py-2 text-sm text-ink-soft shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-ivy shrink-0" />
+                  <span>
+                    <span className="text-ink font-medium">{stats.visitors.toLocaleString()}+</span> students
+                    <span className="text-rule mx-2">·</span>
+                    <span className="text-ink font-medium">{stats.ratings.toLocaleString()}</span> ratings
+                    <span className="text-rule mx-2">·</span>
+                    <span className="text-ink font-medium">{stats.comments.toLocaleString()}</span> comments
+                  </span>
+                </div>
+          )}
           </div>
           {isSignedIn && (
             <button
@@ -186,6 +201,7 @@ useEffect(() => {
             </button>
           )}
         </div>
+
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="flex-1 relative">
@@ -202,16 +218,17 @@ useEffect(() => {
             className="rounded-full bg-white border border-rule px-4 py-3 text-sm outline-none focus:border-brass transition-colors"
           >
             <option value="">All departments</option>
-            <option value="CHED
-            ">Chemical Dept.</option>
+            <option value="CHED">Chemical</option>
             <option value="Chemistry & Biochemistry">Chemistry and Biochem</option>
-            <option value="CID">Civil Dept.</option>
+            <option value="CED">Civil</option>
             <option value="CSED">CSED</option>
             <option value="ECED">ECED</option>
-             <option value="DEIE">Electronics and Instr.</option>
-            <option value="Humanities">Humanities Dept.</option>
-              <option value="Mathemtics">Mathematics Dept.</option>
-            <option value="Physics">Physics Dept.</option>
+             <option value="DEIE">DEIE</option>
+            <option value="Humanities">Humanities</option>
+            <option value="Mathemtics">Mathematics</option>
+            <option value="MED">Mechanical</option>
+            <option value="BTD">BioTech</option>
+            <option value="Physics">Physics</option>
   
           </select>
         </div>

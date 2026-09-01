@@ -48,6 +48,42 @@ const ratingLimiter = rateLimit({
 //     res.status(500).json({ error: "Something went wrong" });
 //   }
 // });
+
+app.post("/api/visits", async (req, res) => {
+  try {
+    const { deviceToken } = req.body;
+    if (!deviceToken) {
+      return res.status(400).json({ error: "deviceToken is required" });
+    }
+    await pool.query(
+      `INSERT INTO visit (device_token) VALUES ($1) ON CONFLICT (device_token) DO NOTHING`,
+      [deviceToken]
+    );
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+app.get("/api/stats", async (req, res) => {
+  try {
+    const [visitors, ratings, comments] = await Promise.all([
+      pool.query("SELECT COUNT(*)::int AS count FROM visit"),
+      pool.query("SELECT COUNT(*)::int AS count FROM rating"),
+      pool.query("SELECT COUNT(*)::int AS count FROM comment WHERE status = 'approved'"),
+    ]);
+    res.json({
+      visitors: visitors.rows[0].count,
+      ratings: ratings.rows[0].count,
+      comments: comments.rows[0].count,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 app.get("/api/faculty", async (req, res) => {
   try {
     const { department, name } = req.query;
