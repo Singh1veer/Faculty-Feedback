@@ -133,6 +133,21 @@ function FacultyList() {
   const [stats, setStats] = useState(null);
   const isSignedIn = !!localStorage.getItem('access_token');
 
+ useEffect(() => {
+    const deviceToken = getOrCreateDeviceToken();
+    fetch(`${import.meta.env.VITE_API_URL}/api/visits`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ deviceToken }),
+    }).catch(() => {});
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/stats`)
+      .then(res => res.json())
+      .then(setStats)
+      .catch(err => console.error('Failed to load stats:', err));
+  }, []);
+
+
 useEffect(() => {
   setLoading(true);
   const params = new URLSearchParams();
