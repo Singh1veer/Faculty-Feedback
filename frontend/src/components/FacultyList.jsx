@@ -132,15 +132,23 @@ function FacultyList() {
   const [detailCache, setDetailCache] = useState({});
   const isSignedIn = !!localStorage.getItem('access_token');
 
-  useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (searchName) params.append('name', searchName);
-    if (searchDept) params.append('department', searchDept);
-    fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`)
-      .then(res => res.json())
-      .then(data => { setFaculty(data); setLoading(false); });
-  }, [searchName, searchDept]);
+useEffect(() => {
+  setLoading(true);
+  const params = new URLSearchParams();
+  if (searchName) params.append('name', searchName);
+  if (searchDept) params.append('department', searchDept);
+  fetch(`${import.meta.env.VITE_API_URL}/api/faculty?${params.toString()}`)
+    .then(res => {
+      if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
+      return res.json();
+    })
+    .then(data => { setFaculty(data); setLoading(false); })
+    .catch(err => {
+      console.error('Failed to load faculty:', err);
+      setFaculty([]);
+      setLoading(false);
+    });
+}, [searchName, searchDept]);
 
   function toggleExpand(f) {
     if (expandedId === f.id) {
@@ -194,7 +202,8 @@ function FacultyList() {
             className="rounded-full bg-white border border-rule px-4 py-3 text-sm outline-none focus:border-brass transition-colors"
           >
             <option value="">All departments</option>
-            <option value="Chemical">Chemical Dept.</option>
+            <option value="CHED
+            ">Chemical Dept.</option>
             <option value="Chemistry & Biochemistry">Chemistry and Biochem</option>
             <option value="CID">Civil Dept.</option>
             <option value="CSED">CSED</option>
