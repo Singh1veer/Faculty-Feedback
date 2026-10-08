@@ -2,7 +2,7 @@
 
 An anonymous faculty rating and review platform built for students of **Thapar Institute of Engineering and Technology**. Students browse faculty members, see aggregated star ratings, and read reviews. Verified college students (`@thapar.edu` accounts only) can leave comments, which pass through a profanity filter and an admin moderation queue before they go public.
 
-**Live site:** [facultymetrics.vercel.app](https://facultymetrics.vercel.app)
+**Live site:** [facultymetrics.vercel.app](https://facultymetrics.vercel.app/faculty)
 
 ---
 
